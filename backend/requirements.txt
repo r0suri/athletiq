@@ -1,0 +1,6 @@
+# Runtime dependencies (packaged into the Lambda by `sam build`)
+fastapi==0.162.0
+mangum==0.22.0
+pydantic==2.14.1
+pydantic-settings==2.16.1
+aws-lambda-powertools==3.37.0

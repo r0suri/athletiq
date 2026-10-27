@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+
+# SAM build output
+.aws-sam/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Node / frontend (added later)
+node_modules/
+dist/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
