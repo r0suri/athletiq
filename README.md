@@ -4,7 +4,7 @@ AI-powered fitness and recovery intelligence. Log runs, rides, and strength sess
 see weekly training load and trends; get explainable, heuristic recovery estimates and
 AI coaching explanations grounded in your computed metrics.
 
-> **Status:** Increment 2. Health endpoint, deterministic analytics engine
+> **Status:** Increment 3. Health endpoint, deterministic analytics engine
 > ([docs/analytics.md](docs/analytics.md)), and the workout and check-in API with
 > Cognito-based authorization and a DynamoDB single-table repository.
 
@@ -30,6 +30,9 @@ Client -> API Gateway (HTTP API, Cognito JWT authorizer) -> Lambda (FastAPI + Ma
 | GET | `/v1/workouts/{id}` | JWT | One workout |
 | DELETE | `/v1/workouts/{id}` | JWT | Delete a workout |
 | PUT | `/v1/checkins/{date}` | JWT | Create or replace a daily wellness check-in |
+| GET | `/v1/me/profile` | JWT | Goal and IANA timezone (defaults if not yet saved) |
+| PUT | `/v1/me/profile` | JWT | Save goal and timezone |
+| GET | `/v1/analytics/summary` | JWT | Heuristic training-load summary for the user's local "today" |
 
 Errors always use `{"error": {"code", "message", "details", "request_id"}}`.
 
@@ -51,8 +54,12 @@ Errors always use `{"error": {"code", "message", "details", "request_id"}}`.
 |---|---|---|
 | Workout | `USER#<sub>` | `WORKOUT#<yyyy-mm-dd>#<ULID>` |
 | Daily check-in | `USER#<sub>` | `CHECKIN#<yyyy-mm-dd>` |
+| Profile | `USER#<sub>` | `PROFILE` |
 
-Date-range listing is a single `Query` with `SK BETWEEN`; nothing scans the table
+Date-range listing is a single `Query` with `SK BETWEEN`. The analytics summary reads the
+profile (GetItem), 28 days of workouts and 7 days of check-ins (two key-range Queries) and the
+user's first workout (a `Limit=1` Query, so history length matches the engine's full-history
+result). Nothing scans the table
 (enforced by `tests/integration/test_repository_no_scan.py`).
 
 ## Prerequisites

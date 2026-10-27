@@ -12,7 +12,7 @@ from aws_lambda_powertools.logging import correlation_paths
 from fastapi import FastAPI, Request
 from mangum import Mangum
 
-from app.api.routes import checkins, health, workouts
+from app.api.routes import analytics, checkins, health, profile, workouts
 from app.core.config import get_settings
 from app.core.errors import register_error_handlers
 from app.core.logging import logger
@@ -59,6 +59,8 @@ def create_app() -> FastAPI:
     app.include_router(health.router, prefix=API_PREFIX)
     app.include_router(workouts.router, prefix=API_PREFIX)
     app.include_router(checkins.router, prefix=API_PREFIX)
+    app.include_router(profile.router, prefix=API_PREFIX)
+    app.include_router(analytics.router, prefix=API_PREFIX)
     return app
 
 

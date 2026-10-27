@@ -177,6 +177,21 @@ class WorkoutRepository:
                 return results, None
             kwargs["ExclusiveStartKey"] = last_key
 
+    def earliest(self, user_id: str) -> StoredWorkout | None:
+        """The user's first-ever workout: one item, read in ascending key order.
+
+        The key range starts at "WORKOUT#" so PROFILE and CHECKIN# items in the same
+        partition are never matched.
+        """
+        response = self._table.query(
+            KeyConditionExpression=Key("PK").eq(user_pk(user_id))
+            & Key("SK").between(SK_PREFIX, f"{SK_PREFIX}{SK_HIGH}"),
+            ScanIndexForward=True,
+            Limit=1,
+        )
+        items = response.get("Items", [])
+        return _from_item(items[0]) if items else None
+
     def iter_range(self, user_id: str, start: date, end: date) -> Iterator[StoredWorkout]:
         """Every workout dated start..end, oldest first (used by analytics)."""
         kwargs: dict[str, Any] = {

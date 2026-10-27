@@ -4,3 +4,4 @@ mangum==0.22.0
 pydantic==2.14.1
 pydantic-settings==2.16.1
 aws-lambda-powertools==3.37.0
+tzdata==2026.5  # IANA timezone database; Lambda's base image may not ship one
