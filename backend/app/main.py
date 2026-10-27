@@ -6,19 +6,23 @@ same code runs locally and in Lambda.
 """
 
 import time
+import uuid
 
 from aws_lambda_powertools.logging import correlation_paths
 from fastapi import FastAPI, Request
 from mangum import Mangum
 
-from app.api.routes import health
+from app.api.routes import checkins, health, workouts
 from app.core.config import get_settings
+from app.core.errors import register_error_handlers
 from app.core.logging import logger
 
 API_PREFIX = "/v1"
 
 
 def create_app() -> FastAPI:
+    # Loading settings here means a forbidden configuration (e.g. AUTH_MODE=local in
+    # AWS) fails at startup, before any request is served.
     settings = get_settings()
     app = FastAPI(
         title="AthletIQ API",
@@ -29,19 +33,32 @@ def create_app() -> FastAPI:
     )
 
     @app.middleware("http")
-    async def log_requests(request: Request, call_next):
+    async def request_context(request: Request, call_next):
+        event = request.scope.get("aws.event") or {}
+        request_id = event.get("requestContext", {}).get("requestId") or str(uuid.uuid4())
+        request.state.request_id = request_id
         start = time.perf_counter()
-        response = await call_next(request)
-        logger.info(
-            "request completed",
-            method=request.method,
-            path=request.url.path,
-            status_code=response.status_code,
-            duration_ms=round((time.perf_counter() - start) * 1000, 2),
-        )
-        return response
+        status_code = 500
+        try:
+            response = await call_next(request)
+            status_code = response.status_code
+            response.headers["X-Request-Id"] = request_id
+            return response
+        finally:
+            # Metadata only: never log request bodies (they contain health-related data).
+            logger.info(
+                "request completed",
+                method=request.method,
+                path=request.url.path,
+                status_code=status_code,
+                duration_ms=round((time.perf_counter() - start) * 1000, 2),
+                request_id=request_id,
+            )
 
+    register_error_handlers(app)
     app.include_router(health.router, prefix=API_PREFIX)
+    app.include_router(workouts.router, prefix=API_PREFIX)
+    app.include_router(checkins.router, prefix=API_PREFIX)
     return app
 
 

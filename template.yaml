@@ -26,6 +26,7 @@ Globals:
         APP_VERSION: "0.1.0"
         LOG_LEVEL: INFO
         POWERTOOLS_SERVICE_NAME: athletiq
+        AUTH_MODE: cognito # local auth is refused by config validation in AWS
         TABLE_NAME: !Ref AppTable
 
 Resources:
