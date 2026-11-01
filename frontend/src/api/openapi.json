@@ -1,0 +1,1458 @@
+{
+  "components": {
+    "schemas": {
+      "AnalyticsSummaryOut": {
+        "properties": {
+          "as_of": {
+            "description": "The user's local date the summary is calculated for",
+            "format": "date",
+            "title": "As Of",
+            "type": "string"
+          },
+          "consistency": {
+            "$ref": "#/components/schemas/ConsistencyOut"
+          },
+          "current_week": {
+            "$ref": "#/components/schemas/WeekVolumeOut"
+          },
+          "data_quality": {
+            "$ref": "#/components/schemas/DataQualityOut"
+          },
+          "disclaimer": {
+            "title": "Disclaimer",
+            "type": "string"
+          },
+          "flags": {
+            "items": {
+              "$ref": "#/components/schemas/FlagOut"
+            },
+            "title": "Flags",
+            "type": "array"
+          },
+          "goal": {
+            "$ref": "#/components/schemas/Goal"
+          },
+          "goal_summary": {
+            "$ref": "#/components/schemas/GoalSummaryOut"
+          },
+          "load": {
+            "$ref": "#/components/schemas/LoadOut"
+          },
+          "overall_status": {
+            "enum": [
+              "insufficient_data",
+              "no_flags",
+              "caution",
+              "elevated"
+            ],
+            "title": "Overall Status",
+            "type": "string"
+          },
+          "previous_week": {
+            "$ref": "#/components/schemas/WeekVolumeOut"
+          },
+          "profile_configured": {
+            "title": "Profile Configured",
+            "type": "boolean"
+          },
+          "timezone": {
+            "title": "Timezone",
+            "type": "string"
+          },
+          "wellness": {
+            "$ref": "#/components/schemas/WellnessOut"
+          }
+        },
+        "required": [
+          "as_of",
+          "timezone",
+          "profile_configured",
+          "goal",
+          "current_week",
+          "previous_week",
+          "load",
+          "consistency",
+          "wellness",
+          "flags",
+          "overall_status",
+          "goal_summary",
+          "data_quality",
+          "disclaimer"
+        ],
+        "title": "AnalyticsSummaryOut",
+        "type": "object"
+      },
+      "CheckInOut": {
+        "properties": {
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "fatigue": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fatigue"
+          },
+          "sleep_hours": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sleep Hours"
+          },
+          "soreness": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Soreness"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "date",
+          "sleep_hours",
+          "fatigue",
+          "soreness",
+          "updated_at"
+        ],
+        "title": "CheckInOut",
+        "type": "object"
+      },
+      "CheckInPut": {
+        "additionalProperties": false,
+        "properties": {
+          "fatigue": {
+            "anyOf": [
+              {
+                "maximum": 5.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "1 fresh, 5 exhausted",
+            "title": "Fatigue"
+          },
+          "sleep_hours": {
+            "anyOf": [
+              {
+                "maximum": 24.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sleep Hours"
+          },
+          "soreness": {
+            "anyOf": [
+              {
+                "maximum": 5.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "1 none, 5 very sore",
+            "title": "Soreness"
+          }
+        },
+        "title": "CheckInPut",
+        "type": "object"
+      },
+      "ConsistencyOut": {
+        "properties": {
+          "avg_sessions_per_week": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Sessions Per Week"
+          },
+          "consistency_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Consistency Pct"
+          },
+          "target_sessions_per_week": {
+            "title": "Target Sessions Per Week",
+            "type": "integer"
+          },
+          "weeks_evaluated": {
+            "title": "Weeks Evaluated",
+            "type": "integer"
+          },
+          "weeks_meeting_target": {
+            "title": "Weeks Meeting Target",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "target_sessions_per_week",
+          "weeks_evaluated",
+          "weeks_meeting_target",
+          "consistency_pct",
+          "avg_sessions_per_week"
+        ],
+        "title": "ConsistencyOut",
+        "type": "object"
+      },
+      "DataQualityOut": {
+        "properties": {
+          "checkin_values_ignored": {
+            "title": "Checkin Values Ignored",
+            "type": "integer"
+          },
+          "exclusion_reasons": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Exclusion Reasons",
+            "type": "object"
+          },
+          "workouts_excluded": {
+            "title": "Workouts Excluded",
+            "type": "integer"
+          },
+          "workouts_received": {
+            "title": "Workouts Received",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "workouts_received",
+          "workouts_excluded",
+          "exclusion_reasons",
+          "checkin_values_ignored"
+        ],
+        "title": "DataQualityOut",
+        "type": "object"
+      },
+      "ExerciseIn": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "reps": {
+            "maximum": 1000.0,
+            "minimum": 1.0,
+            "title": "Reps",
+            "type": "integer"
+          },
+          "sets": {
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Sets",
+            "type": "integer"
+          },
+          "weight_kg": {
+            "default": 0.0,
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Weight Kg",
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "sets",
+          "reps"
+        ],
+        "title": "ExerciseIn",
+        "type": "object"
+      },
+      "ExerciseOut": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "reps": {
+            "title": "Reps",
+            "type": "integer"
+          },
+          "sets": {
+            "title": "Sets",
+            "type": "integer"
+          },
+          "weight_kg": {
+            "title": "Weight Kg",
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "sets",
+          "reps",
+          "weight_kg"
+        ],
+        "title": "ExerciseOut",
+        "type": "object"
+      },
+      "FlagOut": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "explanation": {
+            "title": "Explanation",
+            "type": "string"
+          },
+          "observed": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Observed"
+          },
+          "status": {
+            "enum": [
+              "triggered",
+              "not_triggered",
+              "insufficient_data"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "threshold": {
+            "title": "Threshold",
+            "type": "number"
+          }
+        },
+        "required": [
+          "code",
+          "status",
+          "observed",
+          "threshold",
+          "explanation"
+        ],
+        "title": "FlagOut",
+        "type": "object"
+      },
+      "Goal": {
+        "enum": [
+          "strength",
+          "endurance",
+          "general_fitness"
+        ],
+        "title": "Goal",
+        "type": "string"
+      },
+      "GoalSummaryOut": {
+        "properties": {
+          "goal": {
+            "$ref": "#/components/schemas/Goal"
+          },
+          "headline": {
+            "title": "Headline",
+            "type": "string"
+          },
+          "metrics": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Metrics",
+            "type": "object"
+          }
+        },
+        "required": [
+          "goal",
+          "headline",
+          "metrics"
+        ],
+        "title": "GoalSummaryOut",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "HealthResponse": {
+        "properties": {
+          "environment": {
+            "title": "Environment",
+            "type": "string"
+          },
+          "status": {
+            "const": "ok",
+            "title": "Status",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "version",
+          "environment"
+        ],
+        "title": "HealthResponse",
+        "type": "object"
+      },
+      "LoadOut": {
+        "properties": {
+          "acwr": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acwr"
+          },
+          "chronic_weekly_load": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chronic Weekly Load"
+          },
+          "history_days": {
+            "title": "History Days",
+            "type": "integer"
+          },
+          "load_28d": {
+            "title": "Load 28D",
+            "type": "number"
+          },
+          "load_7d": {
+            "title": "Load 7D",
+            "type": "number"
+          },
+          "load_previous_7d": {
+            "title": "Load Previous 7D",
+            "type": "number"
+          },
+          "weekly_change_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weekly Change Pct"
+          }
+        },
+        "required": [
+          "load_7d",
+          "load_previous_7d",
+          "load_28d",
+          "chronic_weekly_load",
+          "weekly_change_pct",
+          "acwr",
+          "history_days"
+        ],
+        "title": "LoadOut",
+        "type": "object"
+      },
+      "ProfileOut": {
+        "properties": {
+          "configured": {
+            "title": "Configured",
+            "type": "boolean"
+          },
+          "goal": {
+            "$ref": "#/components/schemas/Goal"
+          },
+          "timezone": {
+            "title": "Timezone",
+            "type": "string"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "required": [
+          "goal",
+          "timezone",
+          "configured",
+          "updated_at"
+        ],
+        "title": "ProfileOut",
+        "type": "object"
+      },
+      "ProfilePut": {
+        "additionalProperties": false,
+        "properties": {
+          "goal": {
+            "$ref": "#/components/schemas/Goal"
+          },
+          "timezone": {
+            "title": "Timezone",
+            "type": "string"
+          }
+        },
+        "required": [
+          "goal",
+          "timezone"
+        ],
+        "title": "ProfilePut",
+        "type": "object"
+      },
+      "RideCreate": {
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "distance_km": {
+            "anyOf": [
+              {
+                "maximum": 1000.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance Km"
+          },
+          "duration_min": {
+            "description": "Minutes, 0 < x <= 1440",
+            "exclusiveMinimum": 0.0,
+            "maximum": 1440.0,
+            "title": "Duration Min",
+            "type": "number"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "rpe": {
+            "description": "Session RPE, 1 (very easy) to 10 (max)",
+            "maximum": 10.0,
+            "minimum": 1.0,
+            "title": "Rpe",
+            "type": "integer"
+          },
+          "type": {
+            "const": "ride",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "date",
+          "duration_min",
+          "rpe",
+          "type"
+        ],
+        "title": "RideCreate",
+        "type": "object"
+      },
+      "RunCreate": {
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "distance_km": {
+            "anyOf": [
+              {
+                "maximum": 500.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance Km"
+          },
+          "duration_min": {
+            "description": "Minutes, 0 < x <= 1440",
+            "exclusiveMinimum": 0.0,
+            "maximum": 1440.0,
+            "title": "Duration Min",
+            "type": "number"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "rpe": {
+            "description": "Session RPE, 1 (very easy) to 10 (max)",
+            "maximum": 10.0,
+            "minimum": 1.0,
+            "title": "Rpe",
+            "type": "integer"
+          },
+          "type": {
+            "const": "run",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "date",
+          "duration_min",
+          "rpe",
+          "type"
+        ],
+        "title": "RunCreate",
+        "type": "object"
+      },
+      "StrengthCreate": {
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "duration_min": {
+            "description": "Minutes, 0 < x <= 1440",
+            "exclusiveMinimum": 0.0,
+            "maximum": 1440.0,
+            "title": "Duration Min",
+            "type": "number"
+          },
+          "exercises": {
+            "items": {
+              "$ref": "#/components/schemas/ExerciseIn"
+            },
+            "maxItems": 50,
+            "title": "Exercises",
+            "type": "array"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "rpe": {
+            "description": "Session RPE, 1 (very easy) to 10 (max)",
+            "maximum": 10.0,
+            "minimum": 1.0,
+            "title": "Rpe",
+            "type": "integer"
+          },
+          "type": {
+            "const": "strength",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "date",
+          "duration_min",
+          "rpe",
+          "type"
+        ],
+        "title": "StrengthCreate",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "WeekVolumeOut": {
+        "properties": {
+          "duration_min": {
+            "title": "Duration Min",
+            "type": "number"
+          },
+          "load": {
+            "description": "Sum of session loads (duration_min x RPE), in AU",
+            "title": "Load",
+            "type": "number"
+          },
+          "rest_days": {
+            "title": "Rest Days",
+            "type": "integer"
+          },
+          "ride_distance_km": {
+            "title": "Ride Distance Km",
+            "type": "number"
+          },
+          "run_distance_km": {
+            "title": "Run Distance Km",
+            "type": "number"
+          },
+          "sessions": {
+            "title": "Sessions",
+            "type": "integer"
+          },
+          "sessions_by_type": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Sessions By Type",
+            "type": "object"
+          },
+          "sessions_missing_distance": {
+            "title": "Sessions Missing Distance",
+            "type": "integer"
+          },
+          "strength_tonnage_kg": {
+            "title": "Strength Tonnage Kg",
+            "type": "number"
+          },
+          "training_days": {
+            "title": "Training Days",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "sessions",
+          "training_days",
+          "rest_days",
+          "duration_min",
+          "load",
+          "run_distance_km",
+          "ride_distance_km",
+          "sessions_missing_distance",
+          "sessions_by_type",
+          "strength_tonnage_kg"
+        ],
+        "title": "WeekVolumeOut",
+        "type": "object"
+      },
+      "WellnessOut": {
+        "properties": {
+          "avg_fatigue": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Fatigue"
+          },
+          "avg_sleep_hours": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Sleep Hours"
+          },
+          "avg_soreness": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Soreness"
+          },
+          "days_with_fatigue_or_soreness": {
+            "title": "Days With Fatigue Or Soreness",
+            "type": "integer"
+          },
+          "fatigue_days_reported": {
+            "title": "Fatigue Days Reported",
+            "type": "integer"
+          },
+          "high_fatigue_or_soreness_days": {
+            "title": "High Fatigue Or Soreness Days",
+            "type": "integer"
+          },
+          "sleep_nights_reported": {
+            "title": "Sleep Nights Reported",
+            "type": "integer"
+          },
+          "soreness_days_reported": {
+            "title": "Soreness Days Reported",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "sleep_nights_reported",
+          "avg_sleep_hours",
+          "fatigue_days_reported",
+          "avg_fatigue",
+          "soreness_days_reported",
+          "avg_soreness",
+          "days_with_fatigue_or_soreness",
+          "high_fatigue_or_soreness_days"
+        ],
+        "title": "WellnessOut",
+        "type": "object"
+      },
+      "WorkoutList": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/WorkoutOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Pass as ?cursor= to fetch the next page; null when done.",
+            "title": "Next Cursor"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "WorkoutList",
+        "type": "object"
+      },
+      "WorkoutOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "distance_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance Km"
+          },
+          "duration_min": {
+            "title": "Duration Min",
+            "type": "number"
+          },
+          "exercises": {
+            "items": {
+              "$ref": "#/components/schemas/ExerciseOut"
+            },
+            "title": "Exercises",
+            "type": "array"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "load": {
+            "description": "Session load in arbitrary units: duration_min x rpe",
+            "title": "Load",
+            "type": "number"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "rpe": {
+            "title": "Rpe",
+            "type": "integer"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "run",
+              "ride",
+              "strength"
+            ],
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "date",
+          "duration_min",
+          "rpe",
+          "load",
+          "source",
+          "created_at"
+        ],
+        "title": "WorkoutOut",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "AthletIQ API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/v1/analytics/summary": {
+      "get": {
+        "description": "Heuristic training-load summary. Not medical advice; see `disclaimer`.",
+        "operationId": "get_summary_v1_analytics_summary_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsSummaryOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Summary",
+        "tags": [
+          "analytics"
+        ]
+      }
+    },
+    "/v1/checkins/{checkin_date}": {
+      "put": {
+        "operationId": "put_checkin_v1_checkins__checkin_date__put",
+        "parameters": [
+          {
+            "description": "Local calendar date, YYYY-MM-DD",
+            "in": "path",
+            "name": "checkin_date",
+            "required": true,
+            "schema": {
+              "description": "Local calendar date, YYYY-MM-DD",
+              "format": "date",
+              "title": "Checkin Date",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckInPut"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckInOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Put Checkin",
+        "tags": [
+          "checkins"
+        ]
+      }
+    },
+    "/v1/health": {
+      "get": {
+        "operationId": "health_v1_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/v1/me/profile": {
+      "get": {
+        "operationId": "get_profile_v1_me_profile_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Profile",
+        "tags": [
+          "profile"
+        ]
+      },
+      "put": {
+        "operationId": "put_profile_v1_me_profile_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfilePut"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Put Profile",
+        "tags": [
+          "profile"
+        ]
+      }
+    },
+    "/v1/workouts": {
+      "get": {
+        "operationId": "list_workouts_v1_workouts_get",
+        "parameters": [
+          {
+            "description": "Inclusive start date",
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Inclusive start date",
+              "title": "From"
+            }
+          },
+          {
+            "description": "Inclusive end date",
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Inclusive end date",
+              "title": "To"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "run",
+                    "ride",
+                    "strength"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Type"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 512,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkoutList"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Workouts",
+        "tags": [
+          "workouts"
+        ]
+      },
+      "post": {
+        "operationId": "create_workout_v1_workouts_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "discriminator": {
+                  "mapping": {
+                    "ride": "#/components/schemas/RideCreate",
+                    "run": "#/components/schemas/RunCreate",
+                    "strength": "#/components/schemas/StrengthCreate"
+                  },
+                  "propertyName": "type"
+                },
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/RunCreate"
+                  },
+                  {
+                    "$ref": "#/components/schemas/RideCreate"
+                  },
+                  {
+                    "$ref": "#/components/schemas/StrengthCreate"
+                  }
+                ],
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkoutOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Workout",
+        "tags": [
+          "workouts"
+        ]
+      }
+    },
+    "/v1/workouts/{workout_id}": {
+      "delete": {
+        "operationId": "delete_workout_v1_workouts__workout_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workout_id",
+            "required": true,
+            "schema": {
+              "title": "Workout Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Workout",
+        "tags": [
+          "workouts"
+        ]
+      },
+      "get": {
+        "operationId": "get_workout_v1_workouts__workout_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workout_id",
+            "required": true,
+            "schema": {
+              "title": "Workout Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkoutOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Workout",
+        "tags": [
+          "workouts"
+        ]
+      }
+    }
+  }
+}

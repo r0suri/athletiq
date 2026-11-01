@@ -120,12 +120,18 @@ Resources:
             Method: GET
             Auth:
               Authorizer: NONE # the only public route
-        Api:
+        ApiGet:
           Type: HttpApi
-          Properties:
-            ApiId: !Ref HttpApi
-            Path: /v1/{proxy+}
-            Method: ANY # protected by the default Cognito JWT authorizer
+          Properties: { ApiId: !Ref HttpApi, Path: "/v1/{proxy+}", Method: GET }
+        ApiPost:
+          Type: HttpApi
+          Properties: { ApiId: !Ref HttpApi, Path: "/v1/{proxy+}", Method: POST }
+        ApiPut:
+          Type: HttpApi
+          Properties: { ApiId: !Ref HttpApi, Path: "/v1/{proxy+}", Method: PUT }
+        ApiDelete:
+          Type: HttpApi
+          Properties: { ApiId: !Ref HttpApi, Path: "/v1/{proxy+}", Method: DELETE }
 
   ApiFunctionLogGroup:
     Type: AWS::Logs::LogGroup
