@@ -5,9 +5,12 @@ import { AuthProvider } from "./auth/AuthProvider";
 import { PublicOnly, RequireAuth } from "./auth/routes";
 import { AppShell } from "./components/AppShell";
 import type { AppConfig } from "./config";
+import { OnboardingOnly, ProfileProvider, RequireProfile } from "./profile/ProfileProvider";
 import { ConfirmPage } from "./pages/ConfirmPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import { OnboardingPage } from "./pages/OnboardingPage";
 import { OverviewPage } from "./pages/OverviewPage";
+import { SettingsPage } from "./pages/SettingsPage";
 import { SignInPage } from "./pages/SignInPage";
 import { SignUpPage } from "./pages/SignUpPage";
 
@@ -22,7 +25,26 @@ export const routes = [
   },
   {
     element: <RequireAuth />,
-    children: [{ element: <AppShell />, children: [{ path: "/", element: <OverviewPage /> }] }],
+    children: [
+      {
+        element: <ProfileProvider />,
+        children: [
+          { element: <OnboardingOnly />, children: [{ path: "/onboarding", element: <OnboardingPage /> }] },
+          {
+            element: <RequireProfile />,
+            children: [
+              {
+                element: <AppShell />,
+                children: [
+                  { path: "/", element: <OverviewPage /> },
+                  { path: "/settings", element: <SettingsPage /> },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
   { path: "*", element: <NotFoundPage /> },
 ];

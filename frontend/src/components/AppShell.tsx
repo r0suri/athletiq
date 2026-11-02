@@ -4,7 +4,10 @@ import { useAuth } from "../auth/context";
 import { Button } from "./Button";
 import { Wordmark } from "./Wordmark";
 
-const NAV = [{ to: "/", label: "Overview" }];
+const NAV = [
+  { to: "/", label: "Overview" },
+  { to: "/settings", label: "Settings" },
+];
 
 export function AppShell() {
   const { email, signOut } = useAuth();
