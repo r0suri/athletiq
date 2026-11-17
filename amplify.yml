@@ -1,0 +1,26 @@
+# AWS Amplify Hosting build settings (monorepo: the frontend lives in frontend/).
+# Amplify reads this file from the repository root on every build.
+# Environment variables (VITE_API_URL, VITE_COGNITO_USER_POOL_ID, VITE_COGNITO_CLIENT_ID)
+# are set in the Amplify console; Vite embeds them at build time. They identify public
+# resources and are not secrets.
+version: 1
+applications:
+  - appRoot: frontend
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - nvm install 22
+            - nvm use 22
+            - node --version
+            - npm ci
+        build:
+          commands:
+            - npm run build # typecheck + production build (tests run in GitHub Actions)
+      artifacts:
+        baseDirectory: dist
+        files:
+          - "**/*"
+      cache:
+        paths:
+          - node_modules/**/*
