@@ -7,10 +7,12 @@ import { AppShell } from "./components/AppShell";
 import type { AppConfig } from "./config";
 import { OnboardingOnly, ProfileProvider, RequireProfile } from "./profile/ProfileProvider";
 import { ConfirmPage } from "./pages/ConfirmPage";
+import { LogWorkoutPage } from "./pages/LogWorkoutPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { OnboardingPage } from "./pages/OnboardingPage";
 import { OverviewPage } from "./pages/OverviewPage";
 import { SettingsPage } from "./pages/SettingsPage";
+import { WorkoutsPage } from "./pages/WorkoutsPage";
 import { SignInPage } from "./pages/SignInPage";
 import { SignUpPage } from "./pages/SignUpPage";
 
@@ -37,6 +39,8 @@ export const routes = [
                 element: <AppShell />,
                 children: [
                   { path: "/", element: <OverviewPage /> },
+                  { path: "/workouts", element: <WorkoutsPage /> },
+                  { path: "/workouts/new", element: <LogWorkoutPage /> },
                   { path: "/settings", element: <SettingsPage /> },
                 ],
               },

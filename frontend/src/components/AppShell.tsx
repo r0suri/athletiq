@@ -6,6 +6,7 @@ import { Wordmark } from "./Wordmark";
 
 const NAV = [
   { to: "/", label: "Overview" },
+  { to: "/workouts", label: "Workouts" },
   { to: "/settings", label: "Settings" },
 ];
 
@@ -21,7 +22,7 @@ export function AppShell() {
               <NavLink
                 key={item.to}
                 to={item.to}
-                end
+                end={item.to === "/"}
                 className={({ isActive }) =>
                   `rounded-md px-3 py-2 text-sm whitespace-nowrap ${isActive ? "bg-raised text-ink" : "text-muted hover:text-ink"}`
                 }
